@@ -13,7 +13,13 @@
                 {{ session('success') }}
             </div>
         @endif
-
+        @if($menus->isEmpty())
+        <div class="col-12">
+            <div class="alert alert-warning text-center mt-4">
+                No tiene imágenes que editar.
+            </div>
+        </div>
+    @else
         <div class="row">
             @foreach($menus as $menu)
                 <div class="col-md-4 mb-4">
@@ -61,6 +67,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                  
                                     <button type="submit" class="btn btn-success">Actualizar</button>
                                 </div>
                             </form>
@@ -68,6 +75,7 @@
                     </div>
                 </div>
             @endforeach
+            @endif
         </div>
     </div>
 </x-layout>

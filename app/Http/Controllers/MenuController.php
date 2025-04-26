@@ -1,15 +1,20 @@
 <?php 
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 
 class MenuController extends Controller
-{
+{ 
     public function editImageForm()
     {
-        $menus = Menu::all();
+        $userId = Auth::id(); // Obtener ID del usuario autenticado
+    
+        $menus = Menu::where('nombre', $userId)
+                     ->whereNotNull('imagenes')
+                     ->get();
+    
         return view('menu.editar', compact('menus'));
     }
 

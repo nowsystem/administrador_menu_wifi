@@ -4,9 +4,11 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PromosController;
-use App\Http\Controllers\ClientesController;
+use App\Http\Controllers\MenuPageController;
 
-Route::get('/clientes', [ClientesController::class, 'mostrarClientes'])->name('clientes.publico');
+Route::post('/guardar-metrica', [MenuPageController::class, 'guardarMetrica'])->name('guardar.metrica');
+
+Route::get('/{pageName}', [MenuPageController::class, 'show'])->where('pageName', '.*');
 
 Route::get('/', function () {
     return view('welcome');

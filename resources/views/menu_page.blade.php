@@ -116,7 +116,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('guardar.metrica') }}" method="POST" novalidate>
+            <form action="{{ route('guardar.metrica', ['pageName' => $pageName]) }}" method="POST" novalidate>
                 @csrf
 
                 <div class="mb-3">

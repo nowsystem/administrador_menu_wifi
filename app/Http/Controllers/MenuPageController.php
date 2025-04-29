@@ -43,7 +43,7 @@ class MenuPageController extends Controller
 
     
     // Método para recibir el formulario de contacto
-    public function guardarMetrica(Request $request)
+    public function guardarMetrica(Request $request, $pageName)
     {
         // Validar los datos
         $validated = $request->validate([
@@ -51,8 +51,10 @@ class MenuPageController extends Controller
             'correo' => 'required|email|max:255',
             'telefono' => 'required|string|max:20',
             'comentarios' => 'required|string|max:500',
+            
+       
         ]);
-
+        $validated['referencia'] = $pageName;
         // Guardar en la tabla metrica
         Metrica::create($validated);
 

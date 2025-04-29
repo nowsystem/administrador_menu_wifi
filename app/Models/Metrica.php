@@ -10,6 +10,7 @@ class Metrica extends Model
         'nombre',
         'correo',
         'telefono',
-        'comentarios'
+        'comentarios',
+        'referencia'
     ];
 }

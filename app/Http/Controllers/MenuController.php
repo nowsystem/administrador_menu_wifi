@@ -9,9 +9,9 @@ class MenuController extends Controller
 { 
     public function editImageForm()
     {
-        $userId = Auth::id(); // Obtener ID del usuario autenticado
+        $nombreWeb = Auth::user()->nombre;
     
-        $menus = Menu::where('nombre', $userId)
+        $menus = Menu::where('nombre', $nombreWeb)
                      ->whereNotNull('imagenes')
                      ->get();
     
@@ -39,4 +39,13 @@ class MenuController extends Controller
             return back()->with('error', 'Error al actualizar: ' . $e->getMessage());
         }
     }
+
+    public function index()
+    {
+        $usuarioNombre = Auth::user()->nombre;
+        $canvaLink = Menu::where('nombre', $usuarioNombre)->value('canva');
+    
+        return view('dashboard', compact('canvaLink'));
+    }
+
 }

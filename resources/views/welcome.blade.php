@@ -87,9 +87,7 @@
             </p>
 
             <div class="d-grid gap-3 d-md-flex justify-content-center">
-                <a href="{{ route('register') }}" class="btn btn-glass btn-glass-green">
-                    Crear cuenta gratis
-                </a>
+              
                 <a href="{{ route('login') }}" class="btn btn-glass btn-glass-dark">
                     Iniciar sesión
                 </a>

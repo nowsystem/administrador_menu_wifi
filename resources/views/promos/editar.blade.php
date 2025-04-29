@@ -43,10 +43,16 @@
                                     </div>
                                 @endif
                                 <div class="card-body text-center">
-                                    <h5 class="card-title">Promoción #</h5>
-                                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalEditar{{ $promo->id }}">
+                                    <h5 class="card-title">Promocion #</h5>
+                                    <button class="btn btn-outline-primary mb-2" data-bs-toggle="modal" data-bs-target="#modalEditar{{ $promo->id }}">
                                         Cambiar Imagen
                                     </button>
+
+                                    <form action="{{ route('promos.eliminar', $promo->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro que quieres eliminar esta promoción?');">
+                                         @csrf 
+                                           @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger">Eliminar</button>   
+                                    </form>
                                 </div>
                             </div>
                         </div>

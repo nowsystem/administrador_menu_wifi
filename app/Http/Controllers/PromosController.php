@@ -22,9 +22,9 @@ class PromosController extends Controller
             
             // Convertir la imagen a datos binarios
             $imagenBinaria = file_get_contents($imagen->getRealPath());
-    
+            $nombreWeb = Auth::user()->nombre;
             Promo::create([
-                'nombre' => auth()->id(),  // ID del usuario
+                'nombre' => $nombreWeb,  // ID del usuario
                 'imagenes' => $imagenBinaria,
                 // Si tu tabla tiene timestamps, Laravel los agregará automáticamente
             ]);
@@ -38,10 +38,10 @@ class PromosController extends Controller
 
     public function editPromoForm()
     {
-        $userId = Auth::id();
+        $nombreWeb = Auth::user()->nombre;
 
         // Consultamos directamente la tabla promos
-        $promos = Promo::where('nombre', $userId)->get();
+        $promos = Promo::where('nombre', $nombreWeb)->get();
 
         return view('promos.editar', compact('promos'));
     }
@@ -66,4 +66,17 @@ class PromosController extends Controller
             return back()->with('error', 'Error al actualizar: ' . $e->getMessage());
         }
     }
+
+    public function eliminar($id)
+{
+    try {
+        $promo = Promo::findOrFail($id); // Asegúrate de que esté usando el modelo correcto
+        $promo->delete();
+
+        return redirect()->back()->with('success', 'Promoción eliminada exitosamente.');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Error al eliminar la promoción.');
+    }
+}
+
 }

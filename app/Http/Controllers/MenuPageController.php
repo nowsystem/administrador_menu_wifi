@@ -61,5 +61,20 @@ class MenuPageController extends Controller
         // Responder sin salir de la página
         return back()->with('success', 'Datos enviados correctamente.');
     }
+
+// Ruta: /tv/{pageName}/checksum
+public function imagenesChecksum($pageName)
+{
+    $imagenes = Menu::where('nombre', $pageName)
+        ->pluck('imagenes')
+        ->toArray();
+
+    // Creamos un hash simple con base64
+    $checksum = md5(implode('', array_map('base64_encode', $imagenes)));
+
+    return response()->json(['checksum' => $checksum]);
+}
+
+    
 }
 

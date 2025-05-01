@@ -8,6 +8,8 @@ class Promo extends Model
 {
       protected $fillable = [
             'nombre',
-            'imagenes'
+            'imagenes',
+            'label' ,
+            'emoji' 
         ];
 }

@@ -26,6 +26,25 @@ Route::prefix('menu_')->group(function () {
 });
 
 
+//ruta tv smart
+
+Route::get('/tv/{pageName}', [MenuController::class, 'vistaTv'])->name('menu.tv');
+
+
+// Nueva ruta para obtener el label de promos
+Route::get('/tv/{pageName}/promo', function ($pageName) {
+    $label = DB::table('promos')
+        ->where('nombre', $pageName)
+        ->value('label');
+
+    return response($label ?? '');
+});
+
+
+// actualiza el modulo tv si cambia la db
+Route::get('/tv/{pageName}/checksum', [MenuPageController::class, 'imagenesChecksum']);
+
+
 //ruta que guarda las metricas
 Route::post('/guardar-metrica/{pageName}', [MenuPageController::class, 'guardarMetrica'])->name('guardar.metrica');
 
@@ -43,6 +62,12 @@ Route::post('/guardar-metrica/{pageName}', [MenuPageController::class, 'guardarM
     Route::get('/promos/editar', [PromosController::class, 'editPromoForm'])->name('promos.editar');
     Route::post('/promos/actualizar/{id}', [PromosController::class, 'updatePromo'])->name('promos.actualizar');
     Route::delete('/promos/{id}', [PromosController::class, 'eliminar'])->name('promos.eliminar');
+    Route::post('/promos/label', [PromosController::class, 'guardarLabel'])->name('promos.label');
+    // Ruta para actualizar texto
+    Route::put('/promos/actualizar-texto/{id}', [PromosController::class, 'actualizarTexto'])->name('promos.actualizar.texto');
+    // Ruta para eliminar
+    Route::delete('/promos/eliminar/{id}', [PromosController::class, 'eliminar'])->name('promos.eliminar');
+
 
 
     //rutas imagenes de menu
@@ -83,7 +108,7 @@ Route::middleware('auth')->group(function () {
 
     // CRUD Clientes
     Route::post('/control/clientes/crear', [ControlController::class, 'crearCliente'])->name('control.clientes.crear');
-    Route::post('/control/clientes/actualizar/{id}', [ControlController::class, 'actualizarCliente'])->name('control.clientes.actualizar');
+    Route::put('/control/clientes/actualizar/{id}', [ControlController::class, 'actualizarCliente'])->name('control.clientes.actualizar');
     Route::delete('/control/clientes/eliminar/{id}', [ControlController::class, 'eliminarCliente'])->name('control.clientes.eliminar');
 });
 

@@ -48,4 +48,15 @@ class MenuController extends Controller
         return view('dashboard', compact('canvaLink'));
     }
 
+
+    public function vistaTv($pageName)
+    {
+        $imagenes = Menu::where('nombre', $pageName)->pluck('imagenes');
+        $promo = Menu::where('nombre', $pageName)->first();
+        $tipoNormal = false;
+    
+        return view('tv', compact('imagenes', 'promo', 'pageName', 'tipoNormal'));
+    }
+
+
 }

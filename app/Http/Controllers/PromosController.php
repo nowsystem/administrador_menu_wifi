@@ -79,4 +79,45 @@ class PromosController extends Controller
     }
 }
 
+
+public function guardarLabel(Request $request)
+{
+   
+    $request->validate([
+        'label' => 'required|string|max:60',
+        'emoji' => 'required|string',
+        'nombre' => 'required|integer', // o string si es texto
+    ]);
+    $nombreWeb = Auth::user()->nombre;
+    $textoFinal = $request->emoji . ' ' . $request->label;
+
+    Promo::create([
+        'label' => $textoFinal,
+        'nombre' => $nombreWeb,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    //dd($request->all());
+    return redirect()->back()->with('success', 'Promoción guardada correctamente.');
+
+    
+}
+
+   public function actualizarTexto(Request $request, $id)
+    {
+    $request->validate([
+        'label' => 'required|string|max:60',
+        'emoji' => 'required|string',
+    ]);
+    $textoFinal = $request->emoji . ' ' . $request->label;
+    $promo = Promo::findOrFail($id);
+    $promo->update([
+        'label' => $textoFinal,
+    ]);
+
+    return redirect()->back()->with('success', 'Texto actualizado correctamente');
+       }
+
+
 }

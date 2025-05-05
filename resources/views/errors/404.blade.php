@@ -1,38 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Error 404</title>
-    <style>
-        body {
-            background-color: #f0f0f0;
-            font-family: 'Segoe UI', sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            font-size: 80px;
-            color: #3490dc;
-        }
-        p {
-            font-size: 24px;
-        }
-        a {
-            color: #3490dc;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.layout')
 
-    <h1>404</h1>
-    <p>La página que buscas no existe.</p>
-    <a href="{{ url('/') }}">Volver al inicio</a>
+@section('title', 'Página no encontrada')
 
-</body>
-</html>
+@section('content')
+    <div style="padding: 100px 20px; color: #fff; text-align: center;">
+        <h1 style="font-size: 80px; color: #3490dc;">404</h1>
+        <p style="font-size: 24px;">La página que buscas no existe.</p>
+        <a href="{{ url('/') }}" style="color: #3490dc; text-decoration: none; font-weight: bold; font-size: 18px;">
+            Volver al inicio
+        </a>
+    </div>
+@endsection

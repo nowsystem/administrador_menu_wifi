@@ -5,8 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\Menu;
 use App\Models\Promo;
 use App\Models\Cliente;
-use App\Models\User;   // 👈 Importamos User
-use App\Models\Metrica; // 👈 Importamos Metrica (la crearemos también)
+use App\Models\User;   // ðŸ‘ˆ Importamos User
+use App\Models\Metrica; // ðŸ‘ˆ Importamos Metrica (la crearemos tambiÃ©n)
 
 
 class MenuPageController extends Controller
@@ -20,12 +20,12 @@ class MenuPageController extends Controller
 
     // Si no se encuentra, devolver un error 404
     if (!$cliente) {
-        return abort(404, 'Página no encontrada');
+        return abort(404, 'Pagina no encontrada');
     }
 
         
 
-        // Buscar imágenes de menus
+        // Buscar imÃ¡genes de menus
         $imagenes = Menu::where('nombre', $pageName)->pluck('imagenes');
           // Buscar promo
         $promo = Promo::where('nombre', $pageName)->first();
@@ -42,7 +42,7 @@ class MenuPageController extends Controller
     }
 
     
-    // Método para recibir el formulario de contacto
+    // MÃ©todo para recibir el formulario de contacto
     public function guardarMetrica(Request $request, $pageName)
     {
         // Validar los datos
@@ -58,22 +58,10 @@ class MenuPageController extends Controller
         // Guardar en la tabla metrica
         Metrica::create($validated);
 
-        // Responder sin salir de la página
+        // Responder sin salir de la pÃ¡gina
         return back()->with('success', 'Datos enviados correctamente.');
     }
 
-// Ruta: /tv/{pageName}/checksum
-public function imagenesChecksum($pageName)
-{
-    $imagenes = Menu::where('nombre', $pageName)
-        ->pluck('imagenes')
-        ->toArray();
-
-    // Creamos un hash simple con base64
-    $checksum = md5(implode('', array_map('base64_encode', $imagenes)));
-
-    return response()->json(['checksum' => $checksum]);
-}
 
     
 }

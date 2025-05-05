@@ -79,6 +79,7 @@
                                         <option value="admin">Administrador</option>
                                         <option value="normal" >Normal</option>
                                         <option value="especial">Especial</option>
+                                        <option value="tv">TV</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
@@ -125,6 +126,7 @@
                                         <option value="admin" {{ $user->tipo == 'admin' ? 'selected' : '' }}>Administrador</option>
                                         <option value="normal" {{ $user->tipo == 'normal' ? 'selected' : '' }}>Normal</option>
                                         <option value="especial" {{ $user->tipo == 'especial' ? 'selected' : '' }}>Especial</option>
+                                        <option value="especial" {{ $user->tipo == 'tv' ? 'selected' : '' }}>TV</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">

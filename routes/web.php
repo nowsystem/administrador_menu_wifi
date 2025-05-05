@@ -7,6 +7,7 @@ use App\Http\Controllers\PromosController;
 use App\Http\Controllers\MenuPageController;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\ControlController;
+use App\Http\Controllers\TvController;
 
 
 //ruta inicio
@@ -26,24 +27,33 @@ Route::prefix('menu_')->group(function () {
 });
 
 
-//ruta tv smart
-
-Route::get('/tv/{pageName}', [MenuController::class, 'vistaTv'])->name('menu.tv');
+ //********************esto es seccion tv */********************************** */
 
 
-// Nueva ruta para obtener el label de promos
-Route::get('/tv/{pageName}/promo', function ($pageName) {
-    $label = DB::table('promos')
-        ->where('nombre', $pageName)
-        ->value('label');
+ //ruta tv smart
 
-    return response($label ?? '');
+// Sección TV
+Route::get('/tv/{pageName}', [TvController::class, 'verPantalla'])->name('tv.verPantalla');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/menu/seleccionar-diseno', [TvController::class, 'seleccionarVista'])->name('tv.seleccionar');
+    Route::post('/tv/guardar-diseno', [TvController::class, 'guardarVista'])->name('tv.guardar');
+    Route::post('/tv/cargar-vista', [TvController::class, 'cargarVista'])->name('tv.cargar.vista');
+});
+
+Route::prefix('tv')->group(function () {
+    Route::get('/{pageName}/promo', [TvController::class, 'getPromo']);
+    Route::get('/{pageName}/checksum', [TvController::class, 'imagenesChecksum']);
+    Route::get('/{pageName}/page-checksum', [TvController::class, 'pageChecksum']);
+
 });
 
 
-// actualiza el modulo tv si cambia la db
-Route::get('/tv/{pageName}/checksum', [MenuPageController::class, 'imagenesChecksum']);
 
+
+
+//***************termina seccion tv******************************************* */
 
 //ruta que guarda las metricas
 Route::post('/guardar-metrica/{pageName}', [MenuPageController::class, 'guardarMetrica'])->name('guardar.metrica');

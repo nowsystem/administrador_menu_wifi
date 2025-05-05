@@ -1,0 +1,151 @@
+body {
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    position: fixed; /* Elimina scroll nativo */
+  }
+  .container-flex {
+    display: flex;
+    height: 100vh;
+  }
+  .left-pane {
+    width: 70%;
+    overflow: hidden;
+    padding: 10px;
+  }
+  .right-pane {
+    width: 30%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .carousel-container {
+    display: flex;
+    overflow-x: hidden;
+    scroll-snap-type: x mandatory;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000; /* Fondo negro de respaldo */
+    margin-right: calc(-1 * (100vw - 100%)); /* Compensar espacio del scrollbar */
+  }
+  .carousel-container::-webkit-scrollbar {
+    display: none;
+  }
+  .carousel-item-tv {
+    flex: 0 0 100vw;
+    width: 100vw;
+    height: 100vh;
+    scroll-snap-align: start;
+    position: relative;
+    overflow: hidden;
+    transform: translate3d(0,0,0); /* Forzar capa GPU */
+  }
+  .carousel-item-tv img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    /* Corrección definitiva para bordes */
+    margin: 0 -1px; /* Elimina líneas fantasma */
+    padding: 0 1px;
+    transform: scale(1.005); 
+    margin-left: -0.5px;
+  }
+  .dynamic-banner {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    z-index: 1000;
+    padding: 12px 25px;
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    animation: float 3s ease-in-out infinite;
+  }
+  .banner-text {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 2rem;
+    color: #fff;
+    text-shadow:
+      0 0 10px rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(255, 0, 150, 0.5);
+  }
+  .banner-text .text-only {
+    background: linear-gradient(45deg, #ff00ff, #00ffff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+  @media (max-width: 768px) {
+    .container-flex {
+      flex-direction: column;
+    }
+    .left-pane,
+    .right-pane {
+      width: 100%;
+      height: 50%;
+    }
+    .dynamic-banner {
+      top: 10px;
+      right: 15px;
+      padding: 8px 15px;
+    }
+    .banner-text {
+      font-size: 1.5rem;
+    }
+  }
+
+  .carousel-container {
+        overflow-x: hidden; /* Ocultar scroll horizontal */
+        margin: 0 -20px; /* Compensar el margen negativo */
+    }
+
+    .carousel-item-tv {
+        flex: 0 0 100vw; /* Ocupar ancho completo del viewport */
+        width: 100vw;
+        margin: 0 !important; /* Eliminar todos los márgenes */
+        transform-origin: center;
+        pointer-events: none; /* Mejorar rendimiento */
+    }
+
+    .carousel-item-tv img {
+        border-radius: 0; /* Eliminar bordes redondeados */
+        box-shadow: none; /* Eliminar sombras */
+    }
+
+    /* Efecto de máscara para ocultar bordes */
+    .carousel-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            to right,
+            rgba(0,0,0,1) 0%,
+            rgba(0,0,0,0) 10%,
+            rgba(0,0,0,0) 90%,
+            rgba(0,0,0,1) 100%
+        );
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+        .carousel-item-tv {
+            flex: 0 0 100vw; /* Mantener full width en móviles */
+        }
+    }

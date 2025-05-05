@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Promo; // Cambiamos el modelo a Promo
@@ -67,17 +68,27 @@ class PromosController extends Controller
         }
     }
 
-    public function eliminar($id)
-{
-    try {
-        $promo = Promo::findOrFail($id); // Asegúrate de que esté usando el modelo correcto
-        $promo->delete();
 
-        return redirect()->back()->with('success', 'Promoción eliminada exitosamente.');
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Error al eliminar la promoción.');
+
+    public function eliminar($id)
+    {
+        try {
+            $promo = Promo::findOrFail($id);
+    
+            // Eliminar el archivo de video si existe
+            if ($promo->video && Storage::disk('public')->exists($promo->video)) {
+                Storage::disk('public')->delete($promo->video);
+            }
+    
+            // Eliminar el registro de la base de datos
+            $promo->delete();
+    
+            return redirect()->back()->with('success', 'Promoción eliminada exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al eliminar la promoción.');
+        }
     }
-}
+    
 
 
 public function guardarLabel(Request $request)
@@ -87,13 +98,28 @@ public function guardarLabel(Request $request)
         'label' => 'required|string|max:60',
         'emoji' => 'required|string',
         'nombre' => 'required|integer', // o string si es texto
+        'video' => 'nullable|mimetypes:video/mp4|max:4096', // 4MB en kilobytes
     ]);
+    $videoPath = null;
+    if ($request->hasFile('video')) {
+        $videoFile = $request->file('video');
+        $hashName = md5_file($videoFile->getRealPath()) . '.' . $videoFile->getClientOriginalExtension();
+    
+        // Solo guardar si no existe ya ese archivo
+        if (!Storage::disk('public')->exists('videos/' . $hashName)) {
+            $videoFile->storeAs('videos', $hashName, 'public');
+        }
+    
+        $videoPath = 'videos/' . $hashName;
+    }
+
     $nombreWeb = Auth::user()->nombre;
     $textoFinal = $request->emoji . ' ' . $request->label;
 
     Promo::create([
         'label' => $textoFinal,
         'nombre' => $nombreWeb,
+        'video' => $videoPath,
         'created_at' => now(),
         'updated_at' => now(),
     ]);
@@ -104,20 +130,41 @@ public function guardarLabel(Request $request)
     
 }
 
-   public function actualizarTexto(Request $request, $id)
-    {
+
+public function actualizarTexto(Request $request, $id)
+{
     $request->validate([
         'label' => 'required|string|max:60',
         'emoji' => 'required|string',
-    ]);
-    $textoFinal = $request->emoji . ' ' . $request->label;
-    $promo = Promo::findOrFail($id);
-    $promo->update([
-        'label' => $textoFinal,
+        'video' => 'nullable|mimes:mp4|max:4096', // 4MB
     ]);
 
+    $promo = Promo::findOrFail($id);
+
+    $textoFinal = $request->emoji . ' ' . $request->label;
+
+    $data = [
+        'label' => $textoFinal,
+    ];
+
+    // Si se subió un nuevo video
+    if ($request->hasFile('video')) {
+        // Eliminar video anterior si existe
+        if ($promo->video && Storage::disk('public')->exists($promo->video)) {
+            Storage::disk('public')->delete($promo->video);
+        }
+
+        // Guardar nuevo video
+        $videoPath = $request->file('video')->store('videos', 'public');
+        $data['video'] = $videoPath;
+    }
+
+    // Actualizar los datos
+    $promo->update($data);
+
     return redirect()->back()->with('success', 'Texto actualizado correctamente');
-       }
+}
+
 
 
 }

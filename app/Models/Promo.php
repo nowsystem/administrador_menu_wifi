@@ -10,6 +10,7 @@ class Promo extends Model
             'nombre',
             'imagenes',
             'label' ,
-            'emoji' 
+            'emoji' ,
+            'video'
         ];
 }

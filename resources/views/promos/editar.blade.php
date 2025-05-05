@@ -54,7 +54,7 @@
                                         <button class="btn btn-outline-primary mb-2" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#modal{{ $isImageUser ? 'Editar' : 'Texto' }}{{ $promo->id }}">
-                                            {{ $isImageUser ? 'Cambiar Imagen' : 'Editar Texto' }}
+                                            {{ $isImageUser ? 'Cambiar Imagen' : 'Editar Promo o Video' }}
                                         </button>
                                         
                                         <form action="{{ route('promos.eliminar', $promo->id) }}" method="POST">
@@ -121,6 +121,24 @@
                                                             <option value="{{ $emoji }}" {{ $promo->emoji == $emoji ? 'selected' : '' }}>{{ $emoji }}</option>
                                                         @endforeach
                                                     </select>
+     
+                                                    @if ($promo->video)
+    <div class="mb-3">
+        <label class="form-label">Video actual:</label>
+        <div class="ratio ratio-16x9">
+            <video controls>
+                <source src="{{ asset('storage/videos/' . $promo->video) }}" type="video/mp4">
+                Tu navegador no soporta videos HTML5.
+            </video>
+        </div>
+    </div>
+@endif
+
+<div class="mb-3">
+    <label for="nuevo_video" class="form-label">Cambiar video (opcional)</label>
+    <input type="file" name="video" id="nuevo_video" class="form-control" accept="video/mp4">
+</div>
+
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -258,6 +276,11 @@
 <option value="💃">💃 Bailarina</option>
                             </select>
                         </div>
+                        <div class="mb-3">
+                <label for="video">Subir video promocional (opcional, MP4, máx. 4MB):</label>
+                <input type="file" name="video" class="form-control" accept="video/mp4" />
+            </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Guardar</button>
